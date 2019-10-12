@@ -2,6 +2,7 @@ import psycopg2
 import datetime
 from src.core.database.book import Book
 from src.core.database.user import User
+from src.core.database.rented_book_info import RentedBookInfo
 
 
 class PostgresDbContext:
@@ -45,8 +46,20 @@ class PostgresDbContext:
         self.conn.commit()
 
     def add_book(self, book):
-        self.crs.execute("insert into books (name,author,amount) values (%s,%s,%s)", book)
+        self.crs.execute("insert into lib (name,author,amount) values (%s,%s,%s)", book)
         self.conn.commit()
+
+    def get_books_from_lib(self, amount):
+        self.crs.execute("select * from lib limit %s", [amount])
+        return list(map(lambda x: Book(x[0], x[1], x[2], x[3]), self.crs.fetchall()))
+
+    def get_books_by_name(self, name):
+        self.crs.execute("select * from lib where name like %s", ['%' + name + '%'])
+        return list(map(lambda x: Book(x[0], x[1], x[2], x[3]), self.crs.fetchall()))
+
+    def get_rented_book_info(self, book_id):
+        self.crs.execute("select * from on_hands where book_id=%s", [book_id])
+        return list(map(lambda x: RentedBookInfo(x[0], x[1], x[2], x[3]), self.crs.fetchall()))
 
     def add_user(self, user):
         self.crs.execute(
@@ -62,8 +75,8 @@ class PostgresDbContext:
         self.crs.execute("insert into on_hands (book_id,user_id,start_date) values (%s,%s,%s)", [book_id, user_id, datetime.datetime.now()])
         self.conn.commit()
 
-    def return_book(self, book_id):
-        self.crs.execute("delete from on_hands where book_id=%s", [book_id])
+    def return_book(self, book_id, user_id):
+        self.crs.execute("delete from on_hands where book_id=%s and user_id=%s", [book_id,user_id])
         self.conn.commit()
 
     def get_users(self):
@@ -81,3 +94,10 @@ class PostgresDbContext:
     def remove_vacation(self, user_id, start):
         self.crs.execute("delete from vacations where user_id=%s and start_date=%s", [user_id, start])
         self.conn.commit()
+
+
+db = PostgresDbContext(False)
+print(len(db.get_rented_book_info(1)))
+# db.rent_book(1, 16)
+# print(len(db.get_books_by_name("book")))
+
