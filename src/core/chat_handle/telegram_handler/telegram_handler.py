@@ -33,17 +33,13 @@ class TelegramBot(ChatHandle):
             return -1
 
     def receive_text(self, callback):
-<<<<<<< HEAD
-=======
         """Receive text message decorator.
                     Receive text message using chat api than call callback
                     Args:
                         callback: callback function that will be called after receive.
                     Returns:
                         self
-                 """
-
->>>>>>> 78600930139dd31137e4e54df9fba341204f834e
+         """
         @self.bot.message_handler(content_types=['text'])
         def receive_message(message):
             callback(message.chat.id, message.text)
@@ -56,7 +52,7 @@ class TelegramBot(ChatHandle):
                         callback: callback function that will be called after receive.
                     Returns:
                         self
-                 """
+         """
 
         @self.bot.message_handler(content_types=['document'])
         def receive_file_msg(message):
@@ -70,7 +66,7 @@ class TelegramBot(ChatHandle):
                         callback: callback function that will be called after receive.
                     Returns:
                         self
-                 """
+         """
 
         @self.bot.message_handler(content_types=['voice'])
         def receive_voice_msg(msg):
@@ -84,7 +80,7 @@ class TelegramBot(ChatHandle):
                         meme: meme image.
                     Returns:
                         Status code
-                 """
+         """
         pass
 
     def run(self):
@@ -93,5 +89,5 @@ class TelegramBot(ChatHandle):
                         None.
                     Returns:
                         None
-                 """
+         """
         self.bot.polling()
