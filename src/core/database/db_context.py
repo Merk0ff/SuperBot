@@ -7,7 +7,7 @@ from src.core.database.rented_book_info import RentedBookInfo
 
 class PostgresDbContext:
     def __init__(self, to_clear):
-        self.conn = psycopg2.connect(dbname='selectel', user='postgres', password='mydb', host='localhost')
+        self.conn = psycopg2.connect(dbname='selectel', user='postgres', password='mydb', host='185.91.53.8')
         self.crs = self.conn.cursor()
 
         crs = self.crs
@@ -97,7 +97,13 @@ class PostgresDbContext:
 
 
 db = PostgresDbContext(False)
-print(len(db.get_rented_book_info(1)))
+
+# db.add_user([4, "fill", "notfill", "username", datetime.datetime.now()])
+
+for usr in db.get_users():
+    print(usr)
+
+# print(len(db.get_rented_book_info(1)))
 # db.rent_book(1, 16)
 # print(len(db.get_books_by_name("book")))
 
