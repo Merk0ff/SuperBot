@@ -6,7 +6,7 @@ services:
         image: postgres:latest
         restart: always
         ports:
-          - "80:80"
+          - "5432:5432"
         environment:
             POSTGRES_DB: selectel
             POSTGRES_USER: postgres
@@ -18,7 +18,7 @@ services:
           context: .
           dockerfile: ./src/core/database/Dockerfile
         ports:
-          - "5432:80"
+          - "5430:80"
         entrypoint:
             ["dockerize",
               "-timeout", "100s",
