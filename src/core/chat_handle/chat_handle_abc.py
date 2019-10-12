@@ -14,11 +14,12 @@ class ChatHandle:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def send_text(self, message):
+    def send_text(self, user_id, text):
         """Send text message.
             Send text message using chat api
             Args:
-                message: text to send.
+                user_id: user/chat id where to send.
+                text: text to send
             Returns:
                 Status code
          """
@@ -71,3 +72,15 @@ class ChatHandle:
                 self
          """
         pass
+
+    @abstractmethod
+    def run(self):
+        """Start receiving messages.
+            Args:
+                None.
+            Returns:
+                None
+         """
+        pass
+# @abstractmethod
+# def receive_voice(self, callback):
