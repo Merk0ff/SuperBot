@@ -6,7 +6,7 @@ services:
         image: postgres:latest
         restart: always
         ports:
-          - "80:5432"
+          - "80:80"
         environment:
             POSTGRES_DB: selectel
             POSTGRES_USER: postgres
