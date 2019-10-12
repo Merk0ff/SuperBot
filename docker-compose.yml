@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+    postgres:
+        container_name: 'postgres'
+        image: postgres:latest
+        restart: always
+        ports:
+          - "5430:5432"
+        environment:
+            POSTGRES_DB: selectel
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: mydb
+    migrations:
+        container_name: 'migrations'
+        image: migrations
+        build:
+          context: .
+          dockerfile: ./src/core/database/Dockerfile
+        ports:
+          - "80:80"
+        entrypoint:
+            ["dockerize",
+              "-timeout", "100s",
+              "-wait-retry-interval", "3s",
+              "-wait", "tcp://postgres:5432",
+              "python", "./src/core/database/db_context.py"]
