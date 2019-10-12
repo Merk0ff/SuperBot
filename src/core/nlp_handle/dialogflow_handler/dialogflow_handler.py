@@ -12,7 +12,7 @@ __maintainer__ = "Dukshtau Philip"
 __email__ = "f.dukshtau@gmail.com"
 __status__ = "develop"
 
-# setup logger
+# Set up logger
 logging.basicConfig(filename="debug.log", level=logging.INFO)
 
 

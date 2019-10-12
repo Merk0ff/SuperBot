@@ -1,8 +1,13 @@
 import logging
 import telebot
+from telebot import apihelper
 from src.core.chat_handle.chat_handle_abc import ChatHandle
 
+# Set up logger
 logging.basicConfig(filename="text.log", level=logging.INFO)
+
+# Add proxy, slava ros com nadzoru!
+apihelper.proxy = {'https': 'https://165.22.44.147:80'}
 
 
 class TelegramBot(ChatHandle):
@@ -20,7 +25,7 @@ class TelegramBot(ChatHandle):
             return -1
 
     def receive_text(self, callback):
-        @self.bot.message_handler(commands=['text'])
+        @self.bot.message_handler(content_types=['text'])
         def receive_message(message):
             callback(message.chat.id, message.text)
             return receive_message
