@@ -8,7 +8,7 @@ from src.core.chat_handle.chat_handle_abc import ChatHandle
 logging.basicConfig(filename="text.log", level=logging.INFO)
 
 # Add proxy, slava ros com nadzoru!
-apihelper.proxy = {'https': 'https://165.22.44.147:80'}
+apihelper.proxy = {'https': 'https://167.71.94.127:3128'}
 
 
 class TelegramBot(ChatHandle):
@@ -41,6 +41,7 @@ class TelegramBot(ChatHandle):
                     Returns:
                         self
          """
+
         @self.bot.message_handler(content_types=['text'])
         def receive_message(message):
             callback(message.chat.id, message.text)
@@ -84,7 +85,11 @@ class TelegramBot(ChatHandle):
                     Returns:
                         Status code
          """
-        pass
+
+        # @self.bot.message_handler(commands=['/meme'])
+        # def send_very_funny_meme(msg):
+        #     meme =
+        #     self.bot.reply_to(msg.chat.id, meme)
 
     def run(self):
         """Start receiving messages.
