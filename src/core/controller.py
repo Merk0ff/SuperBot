@@ -1,5 +1,7 @@
-# from src.core.chat_handle import ChatHandle
-from src.core.nlp_handle.dialogflow_handler.dialogflow_handler import  DialogFlow
+from src.core.chat_handle.telegram_handler.telegram_handler import TelegramBot
+from src.core.nlp_handle.dialogflow_handler.dialogflow_handler import DialogFlow
+from src.core.chat_handle.chat_handle_abc import ChatHandle
+from src.core.nlp_handle.nlp_handle_abc import NLPHandle
 
 __author__ = "Dukshtau Philip"
 __copyright__ = "Copyright 2019, The Project#1"
@@ -11,10 +13,15 @@ __email__ = "f.dukshtau@gmail.com"
 __status__ = "develop"
 
 # Chat handle instance
-chatHandle = object
+chatHandle = ChatHandle
 
 # NLP handle instance
-nlpHandle = object
+nlpHandle = NLPHandle
+
+
+def receiver(id, text):
+    resp = nlpHandle.send_text_to_nlp(text, id)
+    pass
 
 
 def set_up(config):
@@ -24,5 +31,14 @@ def set_up(config):
         Returns:
             None.
      """
-    # chatHandle = ChatHandle(config['dialogflow_api_token'])
+    global chatHandle
+    global nlpHandle
+
+    chatHandle = TelegramBot(config['telegram_api_token'])
     nlpHandle = DialogFlow(config['dialogflow_api_token'])
+
+    chatHandle.receive_text(receiver)
+
+
+def run():
+    chatHandle.run()

@@ -8,6 +8,8 @@ def main():
 
     controller.set_up(config)
 
+    controller.run()
+
 
 if __name__ == '__main__':
     main()
