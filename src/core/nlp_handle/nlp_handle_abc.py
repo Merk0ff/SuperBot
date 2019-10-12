@@ -14,11 +14,12 @@ class NLPHandle:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def send_text_to_nlp(self, text_to_send):
+    def send_text_to_nlp(self, user_id, text_to_send):
         """Send text message to nlp platform.
             Send text message to nlp platform using nlp api
             Args:
                 text_to_send: text to send.
+                user_id: user_id to handle session
             Returns:
                 Dict with paced text
          """
