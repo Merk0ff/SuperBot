@@ -4,6 +4,8 @@ from src.core.nlp_handle.dialogflow_handler.dialogflow_handler import DialogFlow
 from src.core.chat_handle.chat_handle_abc import ChatHandle
 from src.core.nlp_handle.nlp_handle_abc import NLPHandle
 
+from src.core.database.db_context import PostgresDbContext
+
 __author__ = "Dukshtau Philip"
 __copyright__ = "Copyright 2019, The Project#1"
 __credits__ = ["Dukshtau Philip"]
@@ -19,13 +21,44 @@ chatHandle = ChatHandle
 # NLP handle instance
 nlpHandle = NLPHandle
 
+dbHandle = PostgresDbContext(False)
+
 
 def voice(id, voice):
     resp = nlpHandle.send_voice_to_nlp(voice, id)
+    handler_receive(resp, id)
 
 
 def receiver(id, text):
     resp = nlpHandle.send_text_to_nlp(text, id)
+    handler_receive(resp, id)
+
+
+def handler_receive(resp, id):
+    if 'answer' in resp:
+        chatHandle.send_text(id, resp['answer'])
+    elif resp['intent'] == "Когда зарплата":
+        user = dbHandle.get_user(id)
+        msg = "зарплата будет" + user['salary_date']
+        # chatHandle.send_text(id, msg)
+    elif resp['intent'] == "Челик":
+        user = dbHandle.get_user_by_name(resp['params']['given-name'][0], resp['params']['last-name'])
+        msg = "Знаю такого!" + user.first_name + " Тот еще пидор!"
+        chatHandle.send_text(id, msg)
+    elif resp.type == "книга":
+        if resp.action == "взять":
+            dbHandle.rent_book(resp.book_id, resp.user_id)
+            chatHandle.send_text(resp.user_id, "Молодец! Взял книгу!")
+        elif resp.action == "вернуть":
+            dbHandle.return_book(resp.book_id)
+            chatHandle.send_text(resp.user_id, "Молодец! Вернул книгу!")
+        # chatHandle.send_text()
+    elif resp.type == "переговорка":
+        # chatHandle.send_text()
+        pass
+    elif resp.type == "отпуск":
+        # chatHandle.send_text()
+        pass
 
 
 def set_up(config):
@@ -41,9 +74,11 @@ def set_up(config):
     chatHandle = TelegramBot(config['telegram_api_token'])
     nlpHandle = DialogFlow(config['dialogflow_api_token'])
 
+    chatHandle.receive_command()
     chatHandle.receive_text(receiver)
     chatHandle.receive_voice(voice)
 
 
 def run():
     chatHandle.run()
+    # chatHandle.receive_co

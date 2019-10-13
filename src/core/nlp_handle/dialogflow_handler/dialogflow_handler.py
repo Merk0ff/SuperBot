@@ -1,4 +1,4 @@
-import dialogflow_v2 as dialogflow
+# import dialogflow_v2 as dialogflow
 import os
 import logging
 import urllib
@@ -79,12 +79,12 @@ class DialogFlow(NLPHandle):
         response_dict = \
             {
                 'intent': response['result']['metadata']['intentName'],
-                'params': []
+                'params': {}
             }
 
         for key, value in response['result']['parameters'].items():
             if value:
-                response_dict['params'].append({key: value})
+                response_dict['params'][key] = value
 
         if response['result']['fulfillment']['speech']:
             response_dict['answer'] = response['result']['fulfillment']['speech']
