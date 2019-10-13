@@ -48,27 +48,29 @@ def synthesize(text):
             yield chunk
 
 
-def voice(id, voice):
+def voice(id, voice, **kwargs):
     resp = nlpHandle.send_voice_to_nlp(voice, id)
     handler_receive(resp, id)
 
 
-def receiver(id, text):
+def receiver(id, text, **kwargs):
     resp = nlpHandle.send_text_to_nlp(text, id)
     handler_receive(resp, id)
 
 
-def handler_receive(resp, id):
+def handler_receive(resp, id, username):
     if 'answer' in resp:
         chatHandle.send_text(id, resp['answer'])
     elif resp['intent'] == "Когда зарплата":
-        user = dbHandle.get_user(id)
-        msg = "зарплата будет" + user['salary_date']
-        # chatHandle.send_text(id, msg)
+        user = dbHandle.get_user_
+        msg = "зарплата будет " + user.salary_date + "числа"
+        chatHandle.send_msg(id, msg)
     elif resp['intent'] == "Челик":
         user = dbHandle.get_user_by_name(resp['params']['given-name'][0], resp['params']['last-name'])
         if user:
-            msg = "Знаю такого!" + user.first_name + " Тот еще пидор!"
+            msg = "Знаю такого!" + user.first_name + \
+                  " Тот еще пидор!" + "Это его должность - " \
+                  + user.position
         else:
             msg = "Да хуй знает че доебался????"
         chatHandle.send_msg(id, msg)

@@ -34,11 +34,11 @@ class ChatHandle:
         pass
 
     @abstractmethod
-    def receive_command(self, callback):
+    def receive_command(self, callback, **kwargs):
         pass
 
     @abstractmethod
-    def receive_text(self, callback):
+    def receive_text(self, callback, **kwargs):
         """Receive text message decorator.
             Receive text message using chat api than call callback
             Args:

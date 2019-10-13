@@ -86,7 +86,7 @@ class TelegramBot(ChatHandle):
         def change_flag(msg):
             self.send_meme(msg.chat.id)
 
-    def receive_text(self, callback):
+    def receive_text(self, callback, **kwargs):
         """Receive text message decorator.
                     Receive text message using chat api than call callback
                     Args:
@@ -97,7 +97,7 @@ class TelegramBot(ChatHandle):
 
         @self.bot.message_handler(content_types=['text'])
         def receive_message(message):
-            callback(message.chat.id, message.text)
+            callback(message.chat.id, message.text, user_id=message.from_user.username)
             return receive_message
 
     def receive_file(self, callback):
@@ -114,7 +114,7 @@ class TelegramBot(ChatHandle):
             callback(message.chat.id, message.document)
             return receive_file_msg
 
-    def receive_voice(self, callback):
+    def receive_voice(self, callback, **kwargs):
         """Receive voice message decorator.
                     Receive voice message api than call callback
                     Args:
@@ -127,7 +127,7 @@ class TelegramBot(ChatHandle):
         def receive_voice_msg(msg):
             file_info = self.bot.get_file(msg.voice.file_id)
             file = requests.get('https://api.telegram.org/file/bot{0}/{1}'.format(self.TOKEN, file_info.file_path))
-            callback(msg.chat.id, file.content)
+            callback(msg.chat.id, file.content, user_id=msg.from_user.username)
             return receive_voice_msg
 
     def send_meme(self, user_id):

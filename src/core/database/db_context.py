@@ -56,7 +56,8 @@ class PostgresDbContext:
 
     # book_id will be ignored
     def add_book(self, book):
-        self.crs.execute("insert into lib (name,author,amount) values (%s,%s,%s)", [book.name.lower(), book.author.lower(), book.amount])
+        self.crs.execute("insert into lib (name,author,amount) values (%s,%s,%s)",
+                         [book.name.lower(), book.author.lower(), book.amount])
         self.conn.commit()
 
     def get_books_from_lib(self, amount):
@@ -76,7 +77,8 @@ class PostgresDbContext:
         return list(map(lambda x: RentedBookInfo(x[0], x[1], x[2], x[3]), self.crs.fetchall()))
 
     def rent_book(self, book_id, user_id):
-        self.crs.execute("insert into on_hands (book_id,user_id,start_date) values (%s,%s,%s)", [book_id, user_id, datetime.datetime.now()])
+        self.crs.execute("insert into on_hands (book_id,user_id,start_date) values (%s,%s,%s)",
+                         [book_id, user_id, datetime.datetime.now()])
         self.conn.commit()
 
     def return_book(self, book_id, user_id):
@@ -90,13 +92,17 @@ class PostgresDbContext:
     def add_user(self, user):
         self.crs.execute(
             "insert into users (id, first_name, second_name, username, created_at, salary_date, salary, position) values (%s,%s,%s,%s,%s,%s,%s,%s)",
-            [user.bot_id, user.first_name.lower(), user.second_name.lower(), user.username, user.created_at, user.salary_date, user.salary,user.position])
+            [user.bot_id, user.first_name.lower(), user.second_name.lower(), user.username, user.created_at,
+             user.salary_date, user.salary, user.position])
         self.conn.commit()
 
     def add_users(self, users):
-        data = list(map(lambda x: [x.bot_id, x.first_name.lower(), x.second_name.lower(), x.username, x.created_at, x.salary_date, x.salary, x.position], users))
+        data = list(map(
+            lambda x: [x.bot_id, x.first_name.lower(), x.second_name.lower(), x.username, x.created_at, x.salary_date,
+                       x.salary, x.position], users))
         self.crs.executemany(
-            "insert into users (id, first_name, second_name, username, created_at, salary_date, salary, position) values (%s,%s,%s,%s,%s,%s,%s,%s)", data)
+            "insert into users (id, first_name, second_name, username, created_at, salary_date, salary, position) values (%s,%s,%s,%s,%s,%s,%s,%s)",
+            data)
         self.conn.commit()
 
     def get_users(self):
@@ -114,7 +120,8 @@ class PostgresDbContext:
         self.conn.commit()
 
     def get_user_by_name(self, first_name, second_name):
-        self.crs.execute("select * from users where first_name like %s and second_name like %s", ['%' + first_name + '%', '%' + second_name + '%'])
+        self.crs.execute("select * from users where first_name like %s and second_name like %s",
+                         ['%' + first_name + '%', '%' + second_name + '%'])
         x = self.crs.fetchone()
         if x is not None:
             return User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7])
@@ -142,10 +149,15 @@ db = PostgresDbContext(False)
 # db.add_user([4, "fill", "notfill", "username", datetime.datetime.now()])
 
 # db.add_users([
-#     User(1, "first1", "first1", "first1", datetime.datetime.now(), datetime.datetime.now(), 200, "п"),
-#     User(2, "second2", "second2", "second2", datetime.datetime.now(), datetime.datetime.now(), 300, "c"),
-#     User(3, "third3", "third3", "third3", datetime.datetime.now(), datetime.datetime.now(), 400, "aha")
+#     User(1, "Сергей", "Собянин", "@burger", datetime.datetime.now(), datetime.datetime.now(), 200, "п"),
+#     User(2, "Федос", "Гэнста", "@second2", datetime.datetime.now(), datetime.datetime.now(), 300, "c"),
+#     User(3, "Владимир", "Ильич", "@third3", datetime.datetime.now(), datetime.datetime.now(), 400, "aha"),
+#     User(4, "Алексей", "Навальный", "@nav", datetime.datetime.now(), datetime.datetime.now(), 200, "п"),
+#     User(5, "Изя", "Кацман", "@ma", datetime.datetime.now(), datetime.datetime.now(), 200, "п"),
+#     User(6, "Маша", "Распутина", "@mmmm", datetime.datetime.now(), datetime.datetime.now(), 200, "п"),
 # ])
+
+# db.add_users(997356, "Федос", "Титов", "@FedozZz", datetime.datetime.now(), datetime.datetime.now(), 200, "начальник")])
 
 # db.remove_user(1)
 
@@ -174,9 +186,11 @@ db = PostgresDbContext(False)
 # for vacation in db.get_vacations(1):
 #     print("Vacation of user %s, lasting from %s to %s date" % (vacation.user_id, vacation.start_date, vacation.end_date))
 
-# for usr in db.get_users():
-#     print("User %s with first_name %s, second_name %s, username %s, created at %s, salary date at %s and salary %s, position %s"
-#           % (usr.bot_id, usr.first_name, usr.second_name, usr.username, usr.created_at, usr.salary_date, usr.salary, usr.position))
+for usr in db.get_users():
+    print(
+        "User %s with first_name %s, second_name %s, username %s, created at %s, salary date at %s and salary %s, position %s"
+        % (usr.bot_id, usr.first_name, usr.second_name, usr.username, usr.created_at, usr.salary_date, usr.salary,
+           usr.position))
 
 # usr = db.get_user_by_name("Сергей", "Собянин")
 # print("User %s with first_name %s, second_name %s, username %s, created at %s, salary date at %s and salary %s"
@@ -191,4 +205,3 @@ db = PostgresDbContext(False)
 # print(len(db.get_rented_book_info(1)))
 # db.rent_book(1, 16)
 # print(len(db.get_books_by_name("book")))
-
