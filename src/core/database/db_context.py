@@ -145,9 +145,9 @@ db = PostgresDbContext(False)
 # db.remove_user(1)
 
 # db.add_books([
-#     Book(0, "Р’Р»Р°СЃС‚РµР»РёРЅ РєРѕР»РµС†", "РўРѕР»РєРёРЅ", 35),
-#     Book(1, "РџСЂРµСЃС‚СѓРїР»РµРЅРёРµ Рё РЅР°РєР°Р·Р°РЅРёРµ", "Р”РѕСЃС‚РѕРµРІСЃРєРёР№", 40),
-#     Book(2, "РўРёС…РёР№ РґРѕРЅ", "РЁРѕР»РѕС…РѕРІ", 45),
+#     Book(0, "Властелин колец", "Толкин", 35),
+#     Book(1, "Преступление и наказание", "Достоевский", 40),
+#     Book(2, "Тихий дон", "Шолохов", 45),
 # ])
 
 # db.rent_book(3, 2)
@@ -180,10 +180,9 @@ db = PostgresDbContext(False)
 # for book in db.get_books_from_lib(100):
 #     print("Book %s, named '%s' by author %s, amount = %s" % (book.book_id, book.name, book.author, book.amount))
 
-# for book in db.get_books_by_author("С‚РѕР»"):
+# for book in db.get_books_by_author("тол"):
 #     print("Book %s, named '%s' by author %s, amount = %s" % (book.book_id, book.name, book.author, book.amount))
 
 # print(len(db.get_rented_book_info(1)))
 # db.rent_book(1, 16)
 # print(len(db.get_books_by_name("book")))
-

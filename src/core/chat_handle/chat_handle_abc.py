@@ -52,11 +52,11 @@ class ChatHandle:
         pass
 
     @abstractmethod
-    def send_meme(self, meme):
+    def send_meme(self, user_id):
         """Send meme message.
             Send meme image message using chat api
             Args:
-                meme: meme image.
+                # meme: meme image.
             Returns:
                 Status code
          """

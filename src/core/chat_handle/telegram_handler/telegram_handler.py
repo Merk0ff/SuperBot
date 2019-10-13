@@ -1,6 +1,8 @@
 import logging
 import requests
 import telebot
+import requests
+import io
 from telebot import apihelper
 from src.core.chat_handle.chat_handle_abc import ChatHandle
 
@@ -8,7 +10,7 @@ from src.core.chat_handle.chat_handle_abc import ChatHandle
 logging.basicConfig(filename="text.log", level=logging.INFO)
 
 # Add proxy, slava ros com nadzoru!
-apihelper.proxy = {'https': 'https://167.71.94.127:3128'}
+apihelper.proxy = {'https': 'https://51.15.166.107:3128'}
 
 
 class TelegramBot(ChatHandle):
@@ -77,7 +79,7 @@ class TelegramBot(ChatHandle):
             callback(msg.chat.id, file.content)
             return receive_voice_msg
 
-    def send_meme(self, meme):
+    def send_meme(self, user_id):
         """Send meme message.
                     Send meme image message using chat api
                     Args:
@@ -86,16 +88,29 @@ class TelegramBot(ChatHandle):
                         Status code
          """
 
-        # @self.bot.message_handler(commands=['/meme'])
+        # @self.bot.message_handler(commands=['meme'])
         # def send_very_funny_meme(msg):
-        #     meme =
-        #     self.bot.reply_to(msg.chat.id, meme)
+        # header = {"Accept: application/json"}
+        # response = requests.get('https://icanhazdadjoke.com/', headers={'Accept': 'application/json'}).json()
+        try:
+            response = requests.get("https://meme-api.herokuapp.com/gimme").json()
+            meme_url = response['url']
+            meme_pic = requests.get(meme_url)
+            # img = open("meme.png", "wb")
+            # img.write(meme_pic.content)
+            # img.close()
+            meme = io.BytesIO(meme_pic.content)
+            # meme = open("meme.png", "rb")
+            self.bot.send_photo(user_id, meme)
+        except Exception as e:
+            logging.error(str(e))
 
-    def run(self):
-        """Start receiving messages.
-                    Args:
-                        None.
-                    Returns:
-                        None
-         """
-        self.bot.polling()
+
+def run(self):
+    """Start receiving messages.
+            Args:
+                None.
+            Returns:
+                None
+    """
+    self.bot.polling()
