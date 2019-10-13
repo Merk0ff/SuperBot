@@ -86,6 +86,9 @@ class DialogFlow(NLPHandle):
             if value:
                 response_dict['params'].append({key: value})
 
+        if response['result']['fulfillment']['speech']:
+            response_dict['answer'] = response['result']['fulfillment']['speech']
+
         return response_dict
 
     @staticmethod
