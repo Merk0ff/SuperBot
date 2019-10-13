@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "selectel-inside-bot-vqfdsy",
+  "private_key_id": "dc7da6e2a9d22e6e049eecd86c1bade01132fc6e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQDHrqcisrEAk4sI\nftYu9bn+sygSDkFIJcrNCj4aGTuGlU+y3ryjsFBjAfVkYSR1ZFOiIubUAduRnk/h\noNa19mrf7H/z9H/tERLm0SKGWp7YVVL0CA2mV74D4Fc/GTO47/YTaiSW7mSmZj1e\nk4EfAr+E5muZVZyhp6B81WghcpFCps3p7nkg+bQ7ZutbuiVN4fau4/+uECz4fLKk\neLpmPiZHbCCRI+MCl9n4QnZJN61UJaLY+377qOMzR50RBL4vS/2J3wydOhHOQkB7\nvCNX98vxv68oGVVLMTILFepJd2iUWFwmpRWYo969w20CQsavv1GWNoa50e5CR/5b\nMZ8ydgbBAgMBAAECgf93jV/Jw4/Y9wkBJGPSRXtzjrj6ohnoL6ENrZ/eAFS6nE2m\n+MvJ72kaabSwwdWd57lCQovxHSuej1jnMh8spC3kbyjmuDaZiravHip2RlcC0eR7\nfLP1QPBUp5+U4d7+fcRLT80kBNz4N+FAkCcbr89X8SjX6vWt05eImmtg4QijDLg1\nAmocSDLvTfOFcNCirNuslBml3jh7mrH7fKPOZz0+70nXnW0bDLXHAQ7ygFte/4Il\nd6kWgSYZhNg3nhRaxiDfRO+EQFzYFoxma1BGeUy0PzS+yhxoIbFuPsVeFqXfEEBv\n79u6tRBqktVS1pzmFUZjM9hej0p3rxDYrjdU2GECgYEA6wEDOj4lE1lVvnbDm3wt\n7Kggj4Yj6nb6x68bwvuITHR5Yyq6TmuPAXNbeSLPLLCsLE3uEkmPQPjFfGkUw0N0\nXUdr6k588wkjOmpllCDf3cnDScmCBokaI2E4nWiYHLUXeJ8C/gKiGpnwELfGMbdW\n547p08z2SWi0puQdlsoXMcUCgYEA2YXD8bQdmf3seAq5PcXM4CSNwq6BR/5OwSJO\nkL1j7w9kozNndju+cuyhQ/zurOKAf0Kqcdd7BbyU5ZNtNPhi0IctAIBhnHwX1sou\nCpAfUjlyEbgu7lEFRve1fEqiiPp1heuIFu28as3h+cSBi/7WW+F0F4zTtVrVG6qF\nDFXlPM0CgYEA1stVJN36S0YjDfRFc4879ovxPt2vZDWdn/gYWs5G1QK8lHxQTy8W\nRZAnsn+zdriAlfoguMxNSGhZMQ5msNatvDh0lXNp10Wp0lG/SHYHyBMLER1CYDDe\nGCpbcdxQ9CQ9ML2+IWdMvR2og89FMtnNb9Z7OGClV5GBVO05ckKCkrUCgYA84A+v\nRA4Iu6SDD9U5sXKdw/0cX8P0hvo5WMWOAkLGc5NhjRBGaX/qH8keAto07gqyEtEq\nnPhj6ZvuB+1HJsBYxYvVmRg4OA5f4SMzd5QcadE/nkEcFvaYHtjemPCVzyo2uWzT\npeLWLRox0UnECSSqgBUCRjo1hd8gJ/+mLR/DfQKBgCJ+SWhyqhEM65TT/HfLtTTG\nxjx7FIBh76wFiKrIXXa3nvdBuidVzbUhsM2/2XTRQYziAIzVgq26BLuqv1HhVqnh\nCXops1SV9rXjGU5EJ5kfo65JW2HXf/+EkcpBA6fCJCYI9PFoPtitNfs5l0mVljiZ\n5///LIbe/WhWtXh+qZax\n-----END PRIVATE KEY-----\n",
+  "client_email": "dialogflow-tlqcmu@selectel-inside-bot-vqfdsy.iam.gserviceaccount.com",
+  "client_id": "105774025194439162059",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dialogflow-tlqcmu%40selectel-inside-bot-vqfdsy.iam.gserviceaccount.com"
+}

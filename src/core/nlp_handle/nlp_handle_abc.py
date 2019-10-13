@@ -26,7 +26,7 @@ class NLPHandle:
         pass
 
     @abstractmethod
-    def send_voice_to_nlp(self, voice_to_send):
+    def send_voice_to_nlp(self, voice_to_send, user_id):
         """Send voice message to nlp platform.
             Send voice message to nlp platform using nlp api
             Args:
