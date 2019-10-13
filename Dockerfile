@@ -1,6 +1,6 @@
 FROM python:3
-ADD src/main.py /
+ADD SRC /
 ADD requirements.txt /
 RUN pip install -r requirements.txt
-CMD [ "python", "./main.py user" ]
+CMD [ "python", "./src/main.py user" ]
 CMD tail -f /dev/null

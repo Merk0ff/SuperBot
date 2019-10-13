@@ -26,15 +26,36 @@ class ChatHandle:
         pass
 
     @abstractmethod
-    def send_msg(self, flag):
+    def send_msg(self, user_id, message, *args):
+        """Send message.
+            Send message depends on flag, voice or text
+            Args:
+                user_id: chat id
+                message: callback function that will be called after receive.
+            Returns:
+                Status code
+         """
         pass
 
     @abstractmethod
-    def send_voice(self, id, voice):
+    def send_voice(self, user_id, voice):
+        """Send voice message.
+            Args:
+                user_id: chat id
+                voice: voice message in OGG format.
+            Returns:
+                Status code
+         """
         pass
 
     @abstractmethod
-    def receive_command(self, callback, **kwargs):
+    def receive_command(self):
+        """Command receiver without nlp.
+            Args:
+                None.
+            Returns:
+                None.
+         """
         pass
 
     @abstractmethod
@@ -94,5 +115,3 @@ class ChatHandle:
                 None
          """
         pass
-# @abstractmethod
-# def receive_voice(self, callback):

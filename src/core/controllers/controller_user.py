@@ -24,12 +24,18 @@ dbHandle = PostgresDbContext(False)
 
 def voice(id, voice, **kwargs):
     resp = nlpHandle.send_voice_to_nlp(voice, id)
-    handler_receive(resp, id, **kwargs)
+    try:
+        handler_receive(resp, id, **kwargs)
+    except BaseException as e:
+        print(str(e))
 
 
 def receiver(id, text, **kwargs):
     resp = nlpHandle.send_text_to_nlp(text, id)
-    handler_receive(resp, id, **kwargs)
+    try:
+        handler_receive(resp, id, **kwargs)
+    except BaseException as e:
+        print(str(e))
 
 
 def handler_receive(resp, id, **kwargs):
@@ -70,7 +76,6 @@ def handler_receive(resp, id, **kwargs):
         elif resp.action == "вернуть":
             dbHandle.return_book(resp.book_id)
             chatHandle.send_msg(resp.user_id, "Молодец! Вернул книгу!")
-        # chatHandle.send_text()
 
 
 
@@ -94,4 +99,3 @@ def set_up(config):
 
 def run():
     chatHandle.run()
-    # chatHandle.receive_co

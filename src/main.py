@@ -25,11 +25,8 @@ def main():
 
 
 if __name__ == '__main__':
-    try:
-        if len(sys.argv) < 2:
-            print("Choose version user/moder")
-            logging.error("Wrong args")
-        else:
-            main()
-    except BaseException as e:
-        logging.error(e)
+    if len(sys.argv) < 2:
+        print("Choose version user/moder")
+        logging.error("Wrong args")
+    else:
+        main()
