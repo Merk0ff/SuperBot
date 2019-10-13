@@ -10,7 +10,7 @@ from src.core.chat_handle.chat_handle_abc import ChatHandle
 logging.basicConfig(filename="text.log", level=logging.INFO)
 
 # Add proxy, slava ros com nadzoru!
-apihelper.proxy = {'https': 'https://51.15.166.107:3128'}
+apihelper.proxy = {'https': 'https://209.90.63.108:80'}
 
 
 class TelegramBot(ChatHandle):
@@ -105,12 +105,11 @@ class TelegramBot(ChatHandle):
         except Exception as e:
             logging.error(str(e))
 
-
-def run(self):
-    """Start receiving messages.
-            Args:
-                None.
-            Returns:
-                None
-    """
-    self.bot.polling()
+    def run(self):
+        """Start receiving messages.
+               Args:
+                   None.
+               Returns:
+                   None
+         """
+        self.bot.polling()

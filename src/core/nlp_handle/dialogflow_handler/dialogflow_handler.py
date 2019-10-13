@@ -1,4 +1,4 @@
-import dialogflow_v2 as dialogflow
+# import dialogflow_v2 as dialogflow
 import os
 import logging
 import urllib

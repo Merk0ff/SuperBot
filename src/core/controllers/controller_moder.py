@@ -30,7 +30,7 @@ def receiver(id, text):
     pass
 
 
-def receiver_voice(id, voice):
+def voice(id, voice):
     resp = nlpHandle.send_voice_to_nlp(voice, id)
     # handler_receive(resp)
 
@@ -72,7 +72,7 @@ def set_up(config):
     nlpHandle = DialogFlow(config['dialogflow_api_token'])
 
     chatHandle.receive_text(receiver)
-    chatHandle.receive_voice(receiver_voice)
+    chatHandle.receive_voice(voice)
     # chatHandle.send_meme()
 
 
