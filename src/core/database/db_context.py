@@ -65,11 +65,11 @@ class PostgresDbContext:
         return list(map(lambda x: Book(x[0], x[1], x[2], x[3]), self.crs.fetchall()))
 
     def get_books_by_name(self, name):
-        self.crs.execute("select * from lib where name like %s", ['%' + name + '%'])
+        self.crs.execute("select * from lib where name like %s", ['%' + name.lower() + '%'])
         return list(map(lambda x: Book(x[0], x[1], x[2], x[3]), self.crs.fetchall()))
 
     def get_books_by_author(self, author):
-        self.crs.execute("select * from lib where author like %s", ['%' + author + '%'])
+        self.crs.execute("select * from lib where author like %s", ['%' + author.lower() + '%'])
         return list(map(lambda x: Book(x[0], x[1], x[2], x[3]), self.crs.fetchall()))
 
     def get_rented_book_info(self, book_id):
@@ -122,11 +122,11 @@ class PostgresDbContext:
             return User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7])
 
     def get_users_by_first_name(self, first_name):
-        self.crs.execute("select * from users where first_name like %s", ['%' + first_name + '%'])
+        self.crs.execute("select * from users where first_name like %s", ['%' + first_name.lower() + '%'])
         return list(map(lambda x: User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]), self.crs.fetchall()))
 
     def get_users_by_second_name(self, second_name):
-        self.crs.execute("select * from users where second_name like %s", ['%' + second_name + '%'])
+        self.crs.execute("select * from users where second_name like %s", ['%' + second_name.lower() + '%'])
         return list(map(lambda x: User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]), self.crs.fetchall()))
 
     def remove_user(self, user_id):
@@ -135,7 +135,7 @@ class PostgresDbContext:
 
     def get_user_by_name(self, first_name, second_name):
         self.crs.execute("select * from users where first_name like %s and second_name like %s",
-                         ['%' + first_name + '%', '%' + second_name + '%'])
+                         ['%' + first_name.lower() + '%', '%' + second_name.lower() + '%'])
         x = self.crs.fetchone()
         if x is not None:
             return User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7])
@@ -153,7 +153,7 @@ class PostgresDbContext:
         return list(map(lambda x: Vacation(x[0], x[1], x[2]), self.crs.fetchall()))
 
 
-# db = PostgresDbContext(False)
+db = PostgresDbContext(False)
 # db.add_books([Book(0, "book5", "author5", 25), Book(1, "book4", "author4", 15)])
 # db.add_user([4, "fill", "notfill", "username", datetime.datetime.now()])
 
@@ -164,6 +164,18 @@ class PostgresDbContext:
 #     User(4, "Алексей", "Навальный", "@nav", datetime.datetime.now(), datetime.datetime.now(), 200, "п"),
 #     User(5, "Изя", "Кацман", "@ma", datetime.datetime.now(), datetime.datetime.now(), 200, "п"),
 #     User(6, "Маша", "Распутина", "@mmmm", datetime.datetime.now(), datetime.datetime.now(), 200, "п"),
+# ])
+
+
+# db.add_users([
+#     User(12, "Сергей", "Собянин", "@burger", datetime.datetime.now(), datetime.datetime.now(), 200, "Труженик"),
+#     User(13, "Сергей", "Собянин", "@burger", datetime.datetime.now(), datetime.datetime.now(), 2000,
+#          "поднял Москву с колен"),
+#     User(15, "Сергей", "Собянин", "@burger", datetime.datetime.now(), datetime.datetime.now(), 200, "Молодец"),
+#     User(122, "Сергей", "Собянин", "@burger", datetime.datetime.now(), datetime.datetime.now(), 1200, "п"),
+#     User(133, "Сергей", "Собянин", "@burger", datetime.datetime.now(), datetime.datetime.now(), 200, "Слуга народа"),
+#     User(144, "Сергей", "Собянин", "@burger", datetime.datetime.now(), datetime.datetime.now(), 1200, "п"),
+#     User(155, "Сергей", "Собянин", "@burger", datetime.datetime.now(), datetime.datetime.now(), 200, "п"),
 # ])
 
 # db.add_users(997356, "Федос", "Титов", "@FedozZz", datetime.datetime.now(), datetime.datetime.now(), 200, "начальник")])
@@ -201,6 +213,7 @@ class PostgresDbContext:
 #         % (usr.bot_id, usr.first_name, usr.second_name, usr.username, usr.created_at, usr.salary_date, usr.salary,
 #            usr.position))
 
+# users = print(db.get_users_by_second_name("cобянин"))
 # usr = db.get_user_by_name("Сергей", "Собянин")
 # print("User %s with first_name %s, second_name %s, username %s, created at %s, salary date at %s and salary %s"
 #       % (usr.bot_id, usr.first_name, usr.second_name, usr.username, usr.created_at, usr.salary_date, usr.salary))
