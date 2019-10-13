@@ -63,6 +63,7 @@ class DialogFlow(NLPHandle):
                                 - time     // Count of books to get default = 1
                                 - action   // Action with book
                  """
+        self.request_text = apiai.ApiAI(self.token).text_request()
         self.request_text.session_id = str(user_id)
         self.request_text.query = text_to_send
 
@@ -71,14 +72,15 @@ class DialogFlow(NLPHandle):
         try:
             response = json.loads(self.request_text.getresponse().read().decode('utf-8'))
         except Exception as e:
+            print(str(e))
             logging.error(str(e))
             return 'fail'
 
         response_dict = \
-        {
-            'intent': response['result']['metadata']['intentName'],
-            'params': []
-        }
+            {
+                'intent': response['result']['metadata']['intentName'],
+                'params': []
+            }
 
         for key, value in response['result']['parameters'].items():
             if value:

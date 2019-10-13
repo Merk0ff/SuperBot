@@ -19,12 +19,13 @@ chatHandle = ChatHandle
 # NLP handle instance
 nlpHandle = NLPHandle
 
+
 def voice(id, voice):
     resp = nlpHandle.send_voice_to_nlp(voice, id)
 
+
 def receiver(id, text):
-    pass
-    # resp = nlpHandle.send_text_to_nlp(text, id)
+    resp = nlpHandle.send_text_to_nlp(text, id)
 
 
 def set_up(config):
