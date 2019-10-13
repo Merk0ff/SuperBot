@@ -4,7 +4,7 @@ import telebot
 import requests
 import io
 from telebot import apihelper
-from src.core.chat_handle.chat_handle_abc import ChatHandle
+from core.chat_handle.chat_handle_abc import ChatHandle
 
 # Set up logger
 logging.basicConfig(filename="text.log", level=logging.INFO)

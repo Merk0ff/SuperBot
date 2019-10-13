@@ -1,8 +1,10 @@
 import json
 import logging
 import sys
-import src.core.controllers.controller_user as controller_user
-import src.core.controllers.controller_moder as controller_moder
+import core.controllers.controller_user as controller_user
+import core.controllers.controller_moder as controller_moder
+
+sys.path.append('../')
 
 # Set up logger
 logging.basicConfig(filename="text.log", level=logging.INFO)
@@ -24,7 +26,7 @@ def main():
 
 if __name__ == '__main__':
     try:
-        if len(sys.argv) < 1:
+        if len(sys.argv) < 2:
             print("Choose version user/moder")
             logging.error("Wrong args")
         else:

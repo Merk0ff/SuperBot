@@ -1,10 +1,9 @@
-# import dialogflow_v2 as dialogflow
 import os
 import logging
 import urllib
 import json
 import apiai
-from src.core.nlp_handle.nlp_handle_abc import NLPHandle
+from core.nlp_handle.nlp_handle_abc import NLPHandle
 
 __author__ = "Dukshtau Philip"
 __copyright__ = "Copyright 2019, The Project#1"

@@ -1,7 +1,7 @@
-from src.core.chat_handle.telegram_handler.telegram_handler import TelegramBot
-from src.core.nlp_handle.dialogflow_handler.dialogflow_handler import DialogFlow
-from src.core.chat_handle.chat_handle_abc import ChatHandle
-from src.core.nlp_handle.nlp_handle_abc import NLPHandle
+from core.chat_handle.telegram_handler.telegram_handler import TelegramBot
+from core.nlp_handle.dialogflow_handler.dialogflow_handler import DialogFlow
+from core.chat_handle.chat_handle_abc import ChatHandle
+from core.nlp_handle.nlp_handle_abc import NLPHandle
 
 # from src.core.database.db_context import PostgresDbContext
 

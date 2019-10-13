@@ -1,9 +1,9 @@
 import psycopg2
 import datetime
-from src.core.database.book import Book
-from src.core.database.user import User
-from src.core.database.rented_book_info import RentedBookInfo
-from src.core.database.vacation import Vacation
+from core.database.book import Book
+from core.database.user import User
+from core.database.rented_book_info import RentedBookInfo
+from core.database.vacation import Vacation
 
 
 class PostgresDbContext:
