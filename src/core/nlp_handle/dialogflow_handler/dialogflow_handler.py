@@ -3,7 +3,7 @@ import os
 import logging
 import urllib
 import json
-from google.cloud import speech
+import apiai
 from src.core.nlp_handle.nlp_handle_abc import NLPHandle
 
 __author__ = "Dukshtau Philip"
@@ -31,22 +31,86 @@ class DialogFlow(NLPHandle):
              Returns:
                  None.
           """
-        self.DIALOGFLOW_PROJECT_ID = 'selectel-inside-bot-vqfdsy'
-
         self.token = token
-        self.session_client = dialogflow.SessionsClient()
+        self.request_text = apiai.ApiAI(token).text_request()
 
-        self.speech_client = speech.SpeechClient()
+        self.request_text.lang = 'ru'
 
     def send_text_to_nlp(self, text_to_send, user_id):
         """Send text message to nlp platform.
-            Send text message to nlp platform using nlp api
+                    Send text message to nlp platform using nlp api
+                    Args:
+                        text_to_send: text to send.
+                        user_id: user_id to handle session
+                    Returns:
+                        Dict with paced intent type and paranms or fail str
+                        intent - type of intent
+                        params:
+                            - <Когда зарплата>:
+                                - salary // question about salary
+                                - date // asking salary date
+                            - <Челик>
+                                - last-name // last name of person
+                                - given-name // List of person names
+                                - aboutPerson // direct question about person
+                                    - <должность>
+                                    - <отдел>
+                                    - <отпуск>
+                            - <Книги>
+                                - bookName // Name of the book
+                                - author   // Author name
+                                - any      // Not full search request just try to find
+                                - time     // Count of books to get default = 1
+                                - action   // Action with book
+                 """
+        self.request_text.session_id = str(user_id)
+        self.request_text.query = text_to_send
+
+        response = dict
+
+        try:
+            response = json.loads(self.request_text.getresponse().read().decode('utf-8'))
+        except Exception as e:
+            logging.error(str(e))
+            return 'fail'
+
+        response_dict = \
+        {
+            'intent': response['result']['metadata']['intentName'],
+            'params': []
+        }
+
+        for key, value in response['result']['parameters'].items():
+            if value:
+                response_dict['params'].append({key: value})
+
+        return response_dict
+
+    @staticmethod
+    def __speech_to_text__(voice):
+
+        params = "&".join([
+            "topic=general",
+            "folderId=%s" % "b1g5l8jlg5vlc8hj4f0g",
+            "lang=ru-RU"
+        ])
+
+        url = urllib.request.Request("https://stt.api.cloud.yandex.net/speech/v1/stt:recognize?%s" % params, data=voice)
+        url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
+
+        response_data = urllib.request.urlopen(url).read().decode('UTF-8')
+        decoded_data = json.loads(response_data)
+
+        return decoded_data['result']
+
+    def send_voice_to_nlp(self, voice_to_send, user_id):
+        """Send voice message to nlp platform.
+            Send voice message to nlp platform using nlp api
             Args:
-                text_to_send: text to send.
-                user_id: user_id to handle session
+                voice_to_send: voice to send.
             Returns:
                 Dict with paced text
-                instance - type of instance
+                intent - type of intent
                 params:
                     - <Когда зарплата>:
                         - salary // question about salary
@@ -64,69 +128,11 @@ class DialogFlow(NLPHandle):
                         - any      // Not full search request just try to find
                         - time     // Count of books to get default = 1
                         - action   // Action with book
-         """
-        session = self.session_client.session_path(self.DIALOGFLOW_PROJECT_ID, user_id)
 
-        text_input = dialogflow.types.TextInput(text=text_to_send, language_code='ru')
-        query_input = dialogflow.types.QueryInput(text=text_input)
-
-        response = object
-
-        try:
-            response = self.session_client.detect_intent(session=session, query_input=query_input) # .query_result.parameters
-        except Exception as e:
-            logging.error(str(e))
-            exit(-1)
-
-        response_dict = \
-            {
-                'instance': response.query_result.intent.display_name,
-                'params': response.query_result.parameters
-            }
-
-        return response_dict
-
-    def speech_to_text(self, voice):
-
-        params = "&".join([
-            "topic=general",
-            "folderId=%s" % "b1g5l8jlg5vlc8hj4f0g",
-            "lang=ru-RU"
-        ])
-
-        headers = {}
-
-        url = urllib.request.Request("https://stt.api.cloud.yandex.net/speech/v1/stt:recognize?%s" % params, data=voice)
-        url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
-
-        responseData = urllib.request.urlopen(url).read().decode('UTF-8')
-        decodedData = json.loads(responseData)
-
-        return decodedData['result']
-
-    def send_voice_to_nlp(self, voice_to_send, user_id):
-        """Send voice message to nlp platform.
-            Send voice message to nlp platform using nlp api
-            Args:
-                voice_to_send: voice to send.
-            Returns:
-                Dict with paced voice
          """
 
-        text = self.speech_to_text(voice_to_send)
+        text = self.__speech_to_text__(voice_to_send)
 
         response_dict = self.send_text_to_nlp(text, user_id)
-
-
-        # response_dict = \
-        #     {
-        #         'instance': 'Челик',
-        #         'params':
-        #         {
-        #             'last-name': 'Собянин',
-        #             'given-name': 'Сергей'
-        #         }
-        #     }
-
 
         return response_dict
