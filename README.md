@@ -1,2 +1,4 @@
-# Project#1
+# Super Duper Bot
 
+## Description
+will be added soon
