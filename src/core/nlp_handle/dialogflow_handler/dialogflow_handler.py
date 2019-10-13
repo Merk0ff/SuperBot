@@ -78,16 +78,16 @@ class DialogFlow(NLPHandle):
 
         response_dict = \
             {
-                'intent': response['result']['metadata']['intentName'],
+                'intent': response['result']['metadata']['intentName'].lower(),
                 'params': {}
             }
 
         for key, value in response['result']['parameters'].items():
             if value:
-                response_dict['params'][key] = value
+                response_dict['params'][key.lower()] = value.lower()
 
         if response['result']['fulfillment']['speech']:
-            response_dict['answer'] = response['result']['fulfillment']['speech']
+            response_dict['answer'] = response['result']['fulfillment']['speech'].lower()
 
         return response_dict
 

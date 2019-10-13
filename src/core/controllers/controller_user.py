@@ -34,39 +34,51 @@ def receiver(id, text, **kwargs):
 
 
 def handler_receive(resp, id, **kwargs):
+    chatHandle.send_text(id, "ща будет")
+
     if 'answer' in resp:
         chatHandle.send_msg(id, resp['answer'])
     elif resp['intent'] == "Когда зарплата":
         username = "@" + kwargs['user_id']
         user = dbHandle.get_user_by_username(username)
+
         if user:
             msg = "зарплата будет " + user.salary_date.strftime("%d") + " числа"
         else:
             msg = "Ты кто такой?"
+
         chatHandle.send_msg(id, msg)
     elif resp['intent'] == "Челик":
-        user = dbHandle.get_user_by_name(resp['params']['given-name'][0], resp['params']['last-name'])
-        if user:
-            msg = "Знаю такого!" + user.first_name + \
-                  " Тот еще пидор!" + "Это его должность - " \
-                  + user.position
+        if 'given-name' not in resp['params']:
+            users = dbHandle.get_users_by_second_name(resp['params']['last-name'])
         else:
-            msg = "Да хуй знает че доебался????"
-        chatHandle.send_msg(id, msg)
-    elif resp.type == "книга":
-        if resp.action == "взять":
-            dbHandle.rent_book(resp.book_id, resp.user_id)
-            chatHandle.send_msg(resp.user_id, "Молодец! Взял книгу!")
-        elif resp.action == "вернуть":
-            dbHandle.return_book(resp.book_id)
-            chatHandle.send_msg(resp.user_id, "Молодец! Вернул книгу!")
-        # chatHandle.send_text()
-    elif resp.type == "переговорка":
-        # chatHandle.send_text()
-        pass
-    elif resp.type == "отпуск":
-        # chatHandle.send_text()
-        pass
+            users = [dbHandle.get_user_by_name(resp['params']['given-name'][0], resp['params']['last-name'])]
+
+        if len(users) != 0:
+            chatHandle.send_msg(id, "В базе нашлось %s записей" % len(users))
+
+            for u in users:
+                chatHandle.send_msg(id, "{0} {1}, работает {2}, получает {3} рублей".format(u.first_name, u.second_name,
+                                                                                            u.position, u.salary))
+        else:
+            chatHandle.send_msg(id, "Да хуй знает че доебался????")
+    elif resp['intent'] == "мем":
+        chatHandle.send_meme(id)
+    # elif resp['intent'] == "книга":
+    #     if resp.action == "взять":
+    #         dbHandle.rent_book(resp.book_id, resp.user_id)
+    #         chatHandle.send_msg(resp.user_id, "Молодец! Взял книгу!")
+    #     elif resp.action == "вернуть":
+    #         dbHandle.return_book(resp.book_id)
+    #         chatHandle.send_msg(resp.user_id, "Молодец! Вернул книгу!")
+    #     # chatHandle.send_text()
+    #
+    # elif resp.type == "переговорка":
+    #     # chatHandle.send_text()
+    #     pass
+    # elif resp.type == "отпуск":
+    #     # chatHandle.send_text()
+    #     pass
 
 
 def set_up(config):

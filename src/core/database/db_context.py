@@ -122,11 +122,11 @@ class PostgresDbContext:
             return User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7])
 
     def get_users_by_first_name(self, first_name):
-        self.crs.execute("select * from users where first_name like %s", ['%' + first_name + '%'])
+        self.crs.execute("select * from users where first_name like %s", ['%' + first_name.lower() + '%'])
         return list(map(lambda x: User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]), self.crs.fetchall()))
 
     def get_users_by_second_name(self, second_name):
-        self.crs.execute("select * from users where second_name like %s", ['%' + second_name + '%'])
+        self.crs.execute("select * from users where second_name like %s", ['%' + second_name.lower() + '%'])
         return list(map(lambda x: User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]), self.crs.fetchall()))
 
     def remove_user(self, user_id):
