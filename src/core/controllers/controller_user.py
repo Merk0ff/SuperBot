@@ -1,4 +1,3 @@
-import requests
 from src.core.chat_handle.telegram_handler.telegram_handler import TelegramBot
 from src.core.nlp_handle.dialogflow_handler.dialogflow_handler import DialogFlow
 from src.core.chat_handle.chat_handle_abc import ChatHandle
@@ -22,30 +21,6 @@ chatHandle = ChatHandle
 nlpHandle = NLPHandle
 
 dbHandle = PostgresDbContext(False)
-IAM_TOKEN = 'CggaATEVAgAAABKABIQhLt2D0GoulRwpUZx4NlKsRWGoAYfuSmLpltLFYTF0wcpY3XyXLfaWCUsZt3EznXBQhC6lBY9S3rqlFn38xLUTpZrv4ouN2nPoIvMujmFEfS_0avqyh6xdtkknfLhrjuDm7JqeqXS6794k7tQ5_u3oSOl8_rc0g58HbPtBFhWvJxe3LnlW5Z_aJLDgVF5rRh3ocE2qYFHIycqh55YXBmCvTRwqTEJQkdzNdVFdCCS0ECQr1pxvI1ix5F-cUID6Njcj024fjT-tG7TkdKGj3OW7L2QA9AlD2QGJFHZE4qP5pOVeHqh3kHyee5l9dZrURPnUTDHAa0OqSXwKqJLooZkDP-rTe56P-aFwTOF5Kjl3HwQbdyNe5OneXEz_UGBVOgjB-OC1JNtqsiNplgsVmOGK1mNxdA_Y0dfX_EiekrI51UHpI1uRCNuxTi-SVkKsKsmZYaZ34cMJFdlvdOo7yGy9Ra-WidDGRt6-sW2xd77YBDYSNW8L4aO61BnVL7EMC6eURd6ef8ml1MTgle3mMmXyt1EnrAjoB6uejPhzIR6qylGXCVQzqhkBwhQAT8vZc2fl-Q1hlyxuZ9dxtORFLi9cGYTY1bJCPvEk1BtxHaGPDWLdqChCp8mPvSRHlqnmUz7mNStvPlQXWcrOdhtVrB3kop2TvVSJ3KqCJjx5VP1KGmEKIGY5ZGFjNWE1ZWVjZjQ1ZjI4MGRmZjk5YjQyMmEwYTZhEO22i-0FGK2Iju0FIh8KFGFqZWNtaWlwbXI5aWRhMGtkcDFmEgdGaWwwMDkxWgAwAjgBSggaATEVAgAAAFABIPAE'
-
-
-def synthesize(text):
-    url = 'https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize'
-    headers = {
-        'Authorization': 'Bearer ' + IAM_TOKEN,
-    }
-
-    data = {
-        'text': text,
-        'lang': 'ru-RU',
-        'folderId': "b1g5l8jlg5vlc8hj4f0g",
-        'speed': "0.5",
-        'emotion': 'evil',
-        "voice": "ermil"
-    }
-
-    with requests.post(url, headers=headers, data=data, stream=True) as resp:
-        if resp.status_code != 200:
-            raise RuntimeError("Invalid response received: code: %d, message: %s" % (resp.status_code, resp.text))
-
-        for chunk in resp.iter_content(chunk_size=None):
-            yield chunk
 
 
 def voice(id, voice):
@@ -60,7 +35,7 @@ def receiver(id, text):
 
 def handler_receive(resp, id):
     if 'answer' in resp:
-        chatHandle.send_text(id, resp['answer'])
+        chatHandle.send_msg(id, resp['answer'])
     elif resp['intent'] == "Когда зарплата":
         user = dbHandle.get_user(id)
         msg = "зарплата будет" + user['salary_date']
@@ -75,10 +50,10 @@ def handler_receive(resp, id):
     elif resp.type == "книга":
         if resp.action == "взять":
             dbHandle.rent_book(resp.book_id, resp.user_id)
-            chatHandle.send_text(resp.user_id, "Молодец! Взял книгу!")
+            chatHandle.send_msg(resp.user_id, "Молодец! Взял книгу!")
         elif resp.action == "вернуть":
             dbHandle.return_book(resp.book_id)
-            chatHandle.send_text(resp.user_id, "Молодец! Вернул книгу!")
+            chatHandle.send_msg(resp.user_id, "Молодец! Вернул книгу!")
         # chatHandle.send_text()
     elif resp.type == "переговорка":
         # chatHandle.send_text()

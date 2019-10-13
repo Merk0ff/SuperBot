@@ -1,8 +1,7 @@
-psycopg2_binary==2.8.3
+apiai==1.2.3
 ~equests==2.21.0
-dialogflow==0.6.0
-protobuf==3.10.0
+psycopg2_binary==2.8.3
 psycopg2==2.8.3
 Requests==2.22.0
+atlas==0.27.0
 pyTelegramBotAPI==3.6.6
-apiai==1.2.3
