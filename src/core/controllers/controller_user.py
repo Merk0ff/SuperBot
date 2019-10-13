@@ -64,21 +64,15 @@ def handler_receive(resp, id, **kwargs):
             chatHandle.send_msg(id, "Да хуй знает че доебался????")
     elif resp['intent'] == "мем":
         chatHandle.send_meme(id)
-    # elif resp['intent'] == "книга":
-    #     if resp.action == "взять":
-    #         dbHandle.rent_book(resp.book_id, resp.user_id)
-    #         chatHandle.send_msg(resp.user_id, "Молодец! Взял книгу!")
-    #     elif resp.action == "вернуть":
-    #         dbHandle.return_book(resp.book_id)
-    #         chatHandle.send_msg(resp.user_id, "Молодец! Вернул книгу!")
-    #     # chatHandle.send_text()
-    #
-    # elif resp.type == "переговорка":
-    #     # chatHandle.send_text()
-    #     pass
-    # elif resp.type == "отпуск":
-    #     # chatHandle.send_text()
-    #     pass
+    elif resp['intent'] == "книга":
+        if resp.action == "взять":
+            dbHandle.rent_book(resp.book_id, resp.user_id)
+            chatHandle.send_msg(resp.user_id, "Молодец! Взял книгу!")
+        elif resp.action == "вернуть":
+            dbHandle.return_book(resp.book_id)
+            chatHandle.send_msg(resp.user_id, "Молодец! Вернул книгу!")
+        # chatHandle.send_text()
+
 
 
 def set_up(config):
