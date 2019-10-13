@@ -1,4 +1,5 @@
 import logging
+import requests
 import telebot
 from telebot import apihelper
 from src.core.chat_handle.chat_handle_abc import ChatHandle
@@ -70,7 +71,9 @@ class TelegramBot(ChatHandle):
 
         @self.bot.message_handler(content_types=['voice'])
         def receive_voice_msg(msg):
-            callback(msg.chat.id, msg.voice)
+            file_info = self.bot.get_file(msg.voice.file_id)
+            file = requests.get('https://api.telegram.org/file/bot{0}/{1}'.format(self.TOKEN, file_info.file_path))
+            callback(msg.chat.id, file.content)
             return receive_voice_msg
 
     def send_meme(self, meme):

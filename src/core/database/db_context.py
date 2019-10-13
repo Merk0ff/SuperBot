@@ -114,6 +114,11 @@ class PostgresDbContext:
         self.crs.execute("select * from users where first_name like %s and second_name like %s", ['%' + first_name + '%', '%' + second_name + '%'])
         return list(map(lambda x: User(x[0], x[1], x[2], x[3], x[4], x[5], x[6]), self.crs.fetchall()))[0]
 
+    def get_user(self, last_name, given_name):
+        if given_name is not 0:
+            self.crs.execute("select * from users where second_name=%s && first_name=%s", [last_name], [given_name])
+        return list(map(lambda x: User(x[0], x[1], x[2], x[3], x[4]), self.crs.fetchall()))[0]
+
     def add_vacation(self, user_id, start, end):
         self.crs.execute("insert into vacations (user_id,start_date,end_date) values (%s,%s,%s)", [user_id, start, end])
         self.conn.commit()
