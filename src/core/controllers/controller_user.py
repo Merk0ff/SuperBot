@@ -38,7 +38,7 @@ def handler_receive(resp, id, **kwargs):
 
     if 'answer' in resp:
         chatHandle.send_msg(id, resp['answer'])
-    elif resp['intent'] == "Когда зарплата":
+    elif resp['intent'] == "когда зарплата":
         username = "@" + kwargs['user_id']
         user = dbHandle.get_user_by_username(username)
 
@@ -48,7 +48,7 @@ def handler_receive(resp, id, **kwargs):
             msg = "Ты кто такой?"
 
         chatHandle.send_msg(id, msg)
-    elif resp['intent'] == "Челик":
+    elif resp['intent'] == "челик":
         if 'given-name' not in resp['params']:
             users = dbHandle.get_users_by_second_name(resp['params']['last-name'])
         else:
