@@ -1,7 +1,9 @@
 import dialogflow_v2 as dialogflow
-import base64
 import os
 import logging
+import urllib
+import json
+from google.cloud import speech
 from src.core.nlp_handle.nlp_handle_abc import NLPHandle
 
 __author__ = "Dukshtau Philip"
@@ -17,6 +19,7 @@ __status__ = "develop"
 logging.basicConfig(filename="debug.log", level=logging.INFO)
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'selectel-inside-bot-dc7da6e2a9d2.json'
+IAM_TOKEN = 'CggaATEVAgAAABKABIQhLt2D0GoulRwpUZx4NlKsRWGoAYfuSmLpltLFYTF0wcpY3XyXLfaWCUsZt3EznXBQhC6lBY9S3rqlFn38xLUTpZrv4ouN2nPoIvMujmFEfS_0avqyh6xdtkknfLhrjuDm7JqeqXS6794k7tQ5_u3oSOl8_rc0g58HbPtBFhWvJxe3LnlW5Z_aJLDgVF5rRh3ocE2qYFHIycqh55YXBmCvTRwqTEJQkdzNdVFdCCS0ECQr1pxvI1ix5F-cUID6Njcj024fjT-tG7TkdKGj3OW7L2QA9AlD2QGJFHZE4qP5pOVeHqh3kHyee5l9dZrURPnUTDHAa0OqSXwKqJLooZkDP-rTe56P-aFwTOF5Kjl3HwQbdyNe5OneXEz_UGBVOgjB-OC1JNtqsiNplgsVmOGK1mNxdA_Y0dfX_EiekrI51UHpI1uRCNuxTi-SVkKsKsmZYaZ34cMJFdlvdOo7yGy9Ra-WidDGRt6-sW2xd77YBDYSNW8L4aO61BnVL7EMC6eURd6ef8ml1MTgle3mMmXyt1EnrAjoB6uejPhzIR6qylGXCVQzqhkBwhQAT8vZc2fl-Q1hlyxuZ9dxtORFLi9cGYTY1bJCPvEk1BtxHaGPDWLdqChCp8mPvSRHlqnmUz7mNStvPlQXWcrOdhtVrB3kop2TvVSJ3KqCJjx5VP1KGmEKIGY5ZGFjNWE1ZWVjZjQ1ZjI4MGRmZjk5YjQyMmEwYTZhEO22i-0FGK2Iju0FIh8KFGFqZWNtaWlwbXI5aWRhMGtkcDFmEgdGaWwwMDkxWgAwAjgBSggaATEVAgAAAFABIPAE'
 
 
 class DialogFlow(NLPHandle):
@@ -32,6 +35,8 @@ class DialogFlow(NLPHandle):
 
         self.token = token
         self.session_client = dialogflow.SessionsClient()
+
+        self.speech_client = speech.SpeechClient()
 
     def send_text_to_nlp(self, text_to_send, user_id):
         """Send text message to nlp platform.
@@ -53,6 +58,12 @@ class DialogFlow(NLPHandle):
                             - <должность>
                             - <отдел>
                             - <отпуск>
+                    - <Книги>
+                        - bookName // Name of the book
+                        - author   // Author name
+                        - any      // Not full search request just try to find
+                        - time     // Count of books to get default = 1
+                        - action   // Action with book
          """
         session = self.session_client.session_path(self.DIALOGFLOW_PROJECT_ID, user_id)
 
@@ -75,6 +86,24 @@ class DialogFlow(NLPHandle):
 
         return response_dict
 
+    def speech_to_text(self, voice):
+
+        params = "&".join([
+            "topic=general",
+            "folderId=%s" % "b1g5l8jlg5vlc8hj4f0g",
+            "lang=ru-RU"
+        ])
+
+        headers = {}
+
+        url = urllib.request.Request("https://stt.api.cloud.yandex.net/speech/v1/stt:recognize?%s" % params, data=voice)
+        url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
+
+        responseData = urllib.request.urlopen(url).read().decode('UTF-8')
+        decodedData = json.loads(responseData)
+
+        return decodedData['result']
+
     def send_voice_to_nlp(self, voice_to_send, user_id):
         """Send voice message to nlp platform.
             Send voice message to nlp platform using nlp api
@@ -84,23 +113,20 @@ class DialogFlow(NLPHandle):
                 Dict with paced voice
          """
 
-        encoded_voice = base64.b64encode(voice_to_send)
+        text = self.speech_to_text(voice_to_send)
 
-        audio_encoding = dialogflow.enums.AudioEncoding.AUDIO_ENCODING_OGG_OPUS
-        sample_rate_hertz = 16000
+        response_dict = self.send_text_to_nlp(text, user_id)
 
-        session = self.session_client.session_path(self.DIALOGFLOW_PROJECT_ID, user_id)
 
-        audio_config = dialogflow.types.InputAudioConfig(
-            audio_encoding=audio_encoding, language_code='ru',
-            sample_rate_hertz=sample_rate_hertz)
+        # response_dict = \
+        #     {
+        #         'instance': 'Челик',
+        #         'params':
+        #         {
+        #             'last-name': 'Собянин',
+        #             'given-name': 'Сергей'
+        #         }
+        #     }
 
-        query_input = dialogflow.types.QueryInput(audio_config=audio_config)
 
-        response = self.session_client.detect_intent(
-            session=session, query_input=query_input,
-            input_audio=encoded_voice, timeout=10)
-
-        return response
-
-        pass
+        return response_dict
