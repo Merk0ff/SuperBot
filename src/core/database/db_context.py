@@ -109,6 +109,20 @@ class PostgresDbContext:
         if x is not None:
             return User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7])
 
+    def get_user_by_username(self, username):
+        self.crs.execute("select * from users where username=%s", [username])
+        x = self.crs.fetchone()
+        if x is not None:
+            return User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7])
+
+    def get_users_by_first_name(self, first_name):
+        self.crs.execute("select * from users where first_name like %s", ['%' + first_name + '%'])
+        return list(map(lambda x: User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]), self.crs.fetchall()))
+
+    def get_users_by_second_name(self, second_name):
+        self.crs.execute("select * from users where second_name like %s", ['%' + second_name + '%'])
+        return list(map(lambda x: User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]), self.crs.fetchall()))
+
     def remove_user(self, user_id):
         self.crs.execute("delete from users where id=%s", [user_id])
         self.conn.commit()
@@ -118,11 +132,6 @@ class PostgresDbContext:
         x = self.crs.fetchone()
         if x is not None:
             return User(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7])
-
-    def get_user(self, last_name, given_name):
-        if given_name is not 0:
-            self.crs.execute("select * from users where second_name=%s && first_name=%s", [last_name], [given_name])
-        return list(map(lambda x: User(x[0], x[1], x[2], x[3], x[4]), self.crs.fetchall()))[0]
 
     def add_vacation(self, user_id, start, end):
         self.crs.execute("insert into vacations (user_id,start_date,end_date) values (%s,%s,%s)", [user_id, start, end])
@@ -137,7 +146,7 @@ class PostgresDbContext:
         return list(map(lambda x: Vacation(x[0], x[1], x[2]), self.crs.fetchall()))
 
 
-db = PostgresDbContext(False)
+# db = PostgresDbContext(False)
 # db.add_books([Book(0, "book5", "author5", 25), Book(1, "book4", "author4", 15)])
 # db.add_user([4, "fill", "notfill", "username", datetime.datetime.now()])
 
