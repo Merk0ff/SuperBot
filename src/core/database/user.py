@@ -1,5 +1,5 @@
 class User:
-    def __init__(self, bot_id, first_name, second_name, username, created_at, salary_date, salary):
+    def __init__(self, bot_id, first_name, second_name, username, created_at, salary_date, salary, position):
         self.bot_id = bot_id
         self.first_name = first_name
         self.second_name = second_name
@@ -7,3 +7,4 @@ class User:
         self.created_at = created_at
         self.salary_date = salary_date
         self.salary = salary
+        self.position = position

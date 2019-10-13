@@ -9,8 +9,10 @@ from src.core.chat_handle.chat_handle_abc import ChatHandle
 # Set up logger
 logging.basicConfig(filename="text.log", level=logging.INFO)
 
+IAM_TOKEN = 'CggaATEVAgAAABKABIQhLt2D0GoulRwpUZx4NlKsRWGoAYfuSmLpltLFYTF0wcpY3XyXLfaWCUsZt3EznXBQhC6lBY9S3rqlFn38xLUTpZrv4ouN2nPoIvMujmFEfS_0avqyh6xdtkknfLhrjuDm7JqeqXS6794k7tQ5_u3oSOl8_rc0g58HbPtBFhWvJxe3LnlW5Z_aJLDgVF5rRh3ocE2qYFHIycqh55YXBmCvTRwqTEJQkdzNdVFdCCS0ECQr1pxvI1ix5F-cUID6Njcj024fjT-tG7TkdKGj3OW7L2QA9AlD2QGJFHZE4qP5pOVeHqh3kHyee5l9dZrURPnUTDHAa0OqSXwKqJLooZkDP-rTe56P-aFwTOF5Kjl3HwQbdyNe5OneXEz_UGBVOgjB-OC1JNtqsiNplgsVmOGK1mNxdA_Y0dfX_EiekrI51UHpI1uRCNuxTi-SVkKsKsmZYaZ34cMJFdlvdOo7yGy9Ra-WidDGRt6-sW2xd77YBDYSNW8L4aO61BnVL7EMC6eURd6ef8ml1MTgle3mMmXyt1EnrAjoB6uejPhzIR6qylGXCVQzqhkBwhQAT8vZc2fl-Q1hlyxuZ9dxtORFLi9cGYTY1bJCPvEk1BtxHaGPDWLdqChCp8mPvSRHlqnmUz7mNStvPlQXWcrOdhtVrB3kop2TvVSJ3KqCJjx5VP1KGmEKIGY5ZGFjNWE1ZWVjZjQ1ZjI4MGRmZjk5YjQyMmEwYTZhEO22i-0FGK2Iju0FIh8KFGFqZWNtaWlwbXI5aWRhMGtkcDFmEgdGaWwwMDkxWgAwAjgBSggaATEVAgAAAFABIPAE'
+
 # Add proxy, slava ros com nadzoru!
-apihelper.proxy = {'https': 'https://141.125.82.106:80'}
+apihelper.proxy = {'https': 'https://167.71.59.12:80'}
 
 
 class TelegramBot(ChatHandle):
@@ -18,6 +20,31 @@ class TelegramBot(ChatHandle):
     def __init__(self, token):
         self.TOKEN = token
         self.bot = telebot.TeleBot(token)
+        self.send_flag = 1
+
+    @staticmethod
+    def synthesize(text):
+        url = 'https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize'
+        headers = {
+            'Authorization': 'Bearer ' + IAM_TOKEN,
+        }
+
+        data = {
+            'text': text,
+            'lang': 'ru-RU',
+            'folderId': "b1g5l8jlg5vlc8hj4f0g",
+            'speed': "0.5",
+            'emotion': 'evil',
+            "voice": "ermil"
+        }
+
+        with requests.post(url, headers=headers, data=data, stream=True) as resp:
+            if resp.status_code != 200:
+                raise RuntimeError("Invalid response received: code: %d, message: %s" % (resp.status_code, resp.text))
+
+            return resp.content
+            # for chunk in resp.iter_content(chunk_size=None):
+            #     yield chunk
 
     def send_text(self, user_id, text):
         """Send text message.
@@ -47,7 +74,8 @@ class TelegramBot(ChatHandle):
         if self.send_flag == 0:
             self.send_text(id, args[0])
         elif self.send_flag == 1:
-            self.send_voice(id, args[0])
+            voice = self.synthesize(args[0])
+            self.send_voice(id, voice)
 
     def receive_command(self):
         @self.bot.message_handler(commands=['flag'])
