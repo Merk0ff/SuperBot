@@ -33,9 +33,9 @@ class TelegramBot(ChatHandle):
             'text': text,
             'lang': 'ru-RU',
             'folderId': "b1g5l8jlg5vlc8hj4f0g",
-            'speed': "0.5",
-            'emotion': 'evil',
-            "voice": "ermil"
+            'speed': "1",
+            'emotion': 'neutral',
+            "voice": "oksana"
         }
 
         with requests.post(url, headers=headers, data=data, stream=True) as resp:
@@ -80,7 +80,7 @@ class TelegramBot(ChatHandle):
     def receive_command(self):
         @self.bot.message_handler(commands=['flag'])
         def change_flag(msg):
-            self.flag = not self.flag
+            self.send_flag = not self.send_flag
 
         @self.bot.message_handler(commands=['meme'])
         def change_flag(msg):
